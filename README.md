@@ -65,6 +65,7 @@ Pre-defined end-to-end procedures for common scenarios:
 | `workflows/bug-fix.md` | Handling a reported bug |
 | `workflows/new-project.md` | Starting a brand-new project from scratch |
 | `workflows/code-review.md` | Reviewing and merging code |
+| `workflows/parallel-projects.md` | Running multiple projects simultaneously |
 
 ---
 
@@ -73,6 +74,7 @@ Pre-defined end-to-end procedures for common scenarios:
 ```
 ai-company/
 ├── README.md                        # This file
+├── CLAUDE.md                        # Framework reference (start here)
 ├── COMPANY.md                       # Company rules, workflow, and conventions
 ├── skills/
 │   ├── project-manager/SKILL.md    # Claude Code skill for the PM
@@ -92,19 +94,55 @@ ai-company/
 │   ├── new-feature.md
 │   ├── bug-fix.md
 │   ├── new-project.md
-│   └── code-review.md
+│   ├── code-review.md
+│   └── parallel-projects.md        # Running multiple projects simultaneously
+├── scripts/
+│   ├── run_project.py              # Start / resume a project pipeline (supports parallel)
+│   └── status.py                   # Cross-project status dashboard
 └── projects/                        # Client/product work lives here
+    └── [project-name]/
+        ├── status.md               # Pipeline state for this project
+        ├── task-brief.md
+        ├── design.md
+        ├── implementation.md
+        └── qa/
 ```
 
 ---
 
 ## Getting Started
 
+### Interactive (Claude Code skills)
+
 1. **Give a requirement** to the Project Manager — in plain language, no technical detail needed.
 2. **Review the task brief** the PM produces and confirm it matches your intent.
 3. **Review the system design** the Architect produces and confirm before development starts.
 4. **Wait for QA sign-off** — when QA approves, you decide whether to ship.
 5. **Accept the delivery** or request changes — the loop continues until you're satisfied.
+
+### Automated pipeline (single project)
+
+```bash
+pip install anthropic
+export ANTHROPIC_API_KEY=sk-ant-...
+
+python scripts/run_project.py \
+    --project my-app \
+    --requirement "A task management web app with drag-and-drop boards"
+
+python scripts/status.py
+```
+
+### Automated pipeline (multiple projects in parallel)
+
+```bash
+# Create scripts/projects.json listing each project + requirement
+python scripts/run_project.py --parallel scripts/projects.json
+python scripts/status.py
+```
+
+See `CLAUDE.md` for the full framework reference and `workflows/parallel-projects.md`
+for the complete parallel workflow guide.
 
 You never need to write code, design systems, or manage tasks. Your job is to
 set direction and accept or reject delivery.
