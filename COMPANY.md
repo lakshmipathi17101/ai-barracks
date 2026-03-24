@@ -281,7 +281,60 @@ Your job is to set direction, make priority calls, and accept or reject delivery
 
 ---
 
-## 10. Workflow Reference
+## 10. Multi-Project Parallel Operations
+
+The company can run multiple projects simultaneously. Each project is fully
+isolated in its own folder under `projects/`. The following rules apply when
+more than one project is active at the same time.
+
+### Project Isolation
+
+- Each project lives in `projects/[project-name]/` and has its own `status.md`
+  tracking its current pipeline stage
+- Agents working on Project A never read or write Project B's files
+- Two projects may be at different pipeline stages at the same time — this is normal
+
+### Starting Parallel Projects
+
+Use the pipeline runner script to kick off one or more projects:
+
+```bash
+# Single project
+python scripts/run_project.py --project smartscan --requirement "..."
+
+# Multiple projects concurrently
+python scripts/run_project.py --parallel scripts/projects.json
+```
+
+See `workflows/parallel-projects.md` for the full parallel workflow.
+
+### Status Tracking
+
+Each project's current stage is recorded in `projects/[name]/status.md`.
+The status script shows all projects at a glance:
+
+```bash
+python scripts/status.py
+```
+
+### Human Review with Multiple Active Projects
+
+The human must still review and approve each project's deliverables
+individually. Priority order for reviews:
+1. **Blocked** projects — resolve blockers first so they can resume
+2. **QA-done** projects — review sign-off and give deployment go-ahead
+3. **Running** projects — monitor progress; no action needed unless blocked
+
+### Resource Considerations
+
+All agent invocations call the Claude API. Running many projects in parallel
+means running many concurrent API requests. The `run_project.py` script
+uses Python `asyncio` so the parallelism is I/O-bound and efficient, but
+be mindful of API rate limits if running more than ~5 projects at once.
+
+---
+
+## 11. Workflow Reference
 
 | Workflow | File | Use When |
 |---|---|---|
@@ -290,6 +343,7 @@ Your job is to set direction, make priority calls, and accept or reject delivery
 | Hotfix | `workflows/hotfix.md` | **Urgent** production fix — Critical/High, small change, known root cause |
 | New Project | `workflows/new-project.md` | Starting a brand-new project from scratch |
 | Code Review | `workflows/code-review.md` | Reviewing and merging code (standalone) |
+| Parallel Projects | `workflows/parallel-projects.md` | Running multiple projects simultaneously |
 | Sprint Retrospective | `workflows/sprint-retrospective.md` | End-of-phase lessons and COMPANY.md updates |
 | Dependency Update | `workflows/dependency-update.md` | Weekly/on-demand package audit and CVE patching |
 
@@ -316,7 +370,7 @@ Dependency Updater → Project Manager → Human (major updates only) → [Devel
 
 ---
 
-## 11. Security Policy
+## 12. Security Policy
 
 - **Critical and High security findings always block deployment.** They are never deferred.
 - The Security Auditor runs on every build — it is not optional for any workflow except Hotfix.
