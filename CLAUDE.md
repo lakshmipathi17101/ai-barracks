@@ -2,17 +2,21 @@
 
 AIBarracks is a multi-agent software company where every team member is a
 Claude agent. This document is the primary reference for working with the
-framework, including the new **multi-project parallel execution** capability.
+framework, including the **multi-project parallel execution** capability.
 
 ---
 
-## Agent Permissions
+## Autonomous Action Policy
 
-**Only ask the user for permission in these two situations:**
-1. You are about to delete or remove files, directories, or data
-2. You are about to do a `git push --force` or any destructive git operation
+> **IMPORTANT — applies to all agents and sessions in this workspace.**
 
-For everything else — creating files, editing code, installing packages, running builds, making commits, creating PRs, merging PRs, pushing to new branches — proceed without asking. Do not ask for confirmation on routine operations.
+Only ask the user for permission when:
+1. **Deleting files or data**
+2. **Performing a git force push**
+
+For **all other actions** — including creating files, running commands,
+installing packages, making commits, creating PRs, switching git accounts,
+and pushing to GitHub — **proceed automatically without asking**.
 
 ---
 
@@ -233,4 +237,4 @@ dependencies are needed — all file I/O uses the standard library.
 
 ---
 
-*Last updated: 2026-03-23*
+*Last updated: 2026-03-25*
