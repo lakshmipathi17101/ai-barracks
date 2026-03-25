@@ -6,6 +6,16 @@ framework, including the new **multi-project parallel execution** capability.
 
 ---
 
+## Agent Permissions
+
+**Only ask the user for permission in these two situations:**
+1. You are about to delete or remove files, directories, or data
+2. You are about to do a `git push --force` or any destructive git operation
+
+For everything else — creating files, editing code, installing packages, running builds, making commits, creating PRs, merging PRs, pushing to new branches — proceed without asking. Do not ask for confirmation on routine operations.
+
+---
+
 ## Framework Architecture
 
 ```
