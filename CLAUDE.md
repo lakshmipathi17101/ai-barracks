@@ -4,6 +4,10 @@ AIBarracks is a multi-agent software company where every team member is a
 Claude agent. This document is the primary reference for working with the
 framework, including the **multi-project parallel execution** capability.
 
+> **Note:** `permissions.defaultMode: "bypassPermissions"` is set in
+> `~/.claude/settings.json`. All tool-use permission prompts are disabled
+> globally on this machine.
+
 ---
 
 ## Autonomous Action Policy
@@ -237,4 +241,4 @@ dependencies are needed — all file I/O uses the standard library.
 
 ---
 
-*Last updated: 2026-03-25*
+*Last updated: 2026-04-01*
