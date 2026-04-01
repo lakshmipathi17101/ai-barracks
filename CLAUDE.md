@@ -2,11 +2,25 @@
 
 AIBarracks is a multi-agent software company where every team member is a
 Claude agent. This document is the primary reference for working with the
-framework, including the new **multi-project parallel execution** capability.
+framework, including the **multi-project parallel execution** capability.
 
 > **Note:** `permissions.defaultMode: "bypassPermissions"` is set in
 > `~/.claude/settings.json`. All tool-use permission prompts are disabled
 > globally on this machine.
+
+---
+
+## Autonomous Action Policy
+
+> **IMPORTANT — applies to all agents and sessions in this workspace.**
+
+Only ask the user for permission when:
+1. **Deleting files or data**
+2. **Performing a git force push**
+
+For **all other actions** — including creating files, running commands,
+installing packages, making commits, creating PRs, switching git accounts,
+and pushing to GitHub — **proceed automatically without asking**.
 
 ---
 
