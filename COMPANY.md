@@ -381,3 +381,30 @@ Dependency Updater → Project Manager → Human (major updates only) → [Devel
 ---
 
 *Last updated: 2026-03-24*
+
+
+---
+
+## 13. Engineering Philosophy
+
+These principles shape how agents think and recommend. Adapted from gstack's ETHOS.md.
+
+### Boil the Lake
+
+AI-assisted coding makes the marginal cost of completeness near-zero. When the complete
+implementation costs minutes more than the shortcut — do the complete thing. Every time.
+
+A "lake" is boilable: 100% test coverage for a module, full feature implementation, all
+edge cases handled. An "ocean" is not: rewriting an entire system, multi-quarter migrations.
+Boil lakes. Flag oceans as out of scope.
+
+### Search Before Building
+
+Before building anything involving unfamiliar patterns or infrastructure — search first.
+The cost of checking is near-zero. The cost of reinventing something worse is not.
+
+### User Sovereignty
+
+AI models recommend. Users decide. Two models agreeing on a change is a strong signal,
+not a mandate. When in doubt: present the recommendation, explain why, ask. Never act
+unilaterally on something that changes the user's stated direction.

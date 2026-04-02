@@ -40,6 +40,35 @@ by the agents.
 
 ---
 
+## Extended Team — Specialist Skills (from gstack)
+
+Adapted from [garrytan/gstack](https://github.com/garrytan/gstack). Invoke on demand.
+
+| Skill | What it does |
+|---|---|
+| `skills/office-hours/` | YC-style product brainstorming before any code is written. Startup mode (demand validation) or Builder mode (creative exploration). |
+| `skills/investigate/` | Systematic root-cause debugging. Iron Law: no fixes without root cause. 4-phase: investigate → analyze → hypothesize → implement. |
+| `skills/ship/` | Automated PR workflow: merge base branch, run tests, pre-landing review, push, open PR. |
+| `skills/health/` | Code quality dashboard. Weighted 0–10 composite score across type safety, tests, lint, and dead code. Tracks trends over time. |
+| `skills/canary/` | Post-deploy critical path monitoring with baseline comparison and rollback recommendations. |
+| `skills/document-release/` | Post-ship doc sync. Updates README/CHANGELOG/ARCHITECTURE to match what actually shipped. |
+| `skills/careful/` | Destructive command guardrails. Requires explicit confirmation before `rm -rf`, DROP TABLE, force-push, etc. |
+| `skills/checkpoint/` | Working state save/resume. Captures decisions, open threads, and exact resume point across sessions. |
+
+---
+
+## Recommended Session Workflows
+
+**Starting a new product idea:** `/office-hours` → PM → Architect → Dev → QA → Ship
+
+**Debugging a production issue:** `/investigate` → fix → QA (regression) → `/ship` → `/canary`
+
+**Pre-ship quality gate:** `/health` → Code Reviewer → Security Auditor → `/ship`
+
+**After a release:** `/document-release` → `/canary`
+
+---
+
 ## Standard Workflow
 
 ```
