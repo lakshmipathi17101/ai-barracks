@@ -9,7 +9,8 @@ not adding to an existing system.
 
 ```
 Human (vision) → PM (scoping) → Architect (foundation design) → PM (first feature brief)
-→ Backend + Frontend → QA → DevOps → Human
+→ [Data/DB + UX/Designer] → Backend + Frontend → Code Reviewer → Security Auditor
+→ QA → DevOps → Tech Writer → Sprint Retro → Human
 ```
 
 Starting a new project has an additional Architect phase before any development begins:
@@ -133,15 +134,20 @@ core user journey end-to-end (even if rough).
 
 ### Step 6 onwards — Standard New Feature Workflow
 
-Each feature follows the standard `workflows/new-feature.md` workflow:
+Each feature follows the full `workflows/new-feature.md` workflow:
 
 ```
-PM Task Brief → Architect (feature design, within the foundation) → Developers → QA → DevOps → Human
+PM Task Brief → Architect (feature design, within the foundation)
+→ Data/DB Agent (schema changes) + UX/Designer (UI specs)
+→ Developers → Code Reviewer → Security Auditor → QA → DevOps → Tech Writer → Sprint Retro → Human
 ```
 
 The Architect's role in feature phases is lighter — the foundation is set.
 The Architect primarily defines feature-specific interface contracts and
 reviews any deviations from the foundation.
+
+The Code Reviewer and Security Auditor run on every feature — they are never skipped
+in the new-project workflow.
 
 ---
 
@@ -155,15 +161,26 @@ projects/[project-name]/
 ├── foundation-design.md      # Architect's foundation design document
 ├── infra/                    # DevOps infrastructure documentation
 │   └── setup-report.md
+├── design/                   # UX/Designer design package
+│   ├── tokens.css
+│   ├── wireframes.md
+│   └── components/
+├── store-metadata/           # App Store Agent output (mobile projects)
+├── locales/                  # Localization Agent output (multi-locale projects)
 ├── features/                 # One subfolder per feature
 │   └── [feature-name]/
 │       ├── task-brief.md
 │       ├── design.md
+│       ├── schema/           # Data/DB Agent migrations and seed scripts
 │       ├── implementation-backend.md
 │       ├── implementation-frontend.md
+│       ├── review-notes.md   # Code Reviewer output
+│       ├── security-report.md # Security Auditor output
 │       └── qa/
 │           ├── test-plan.md
 │           └── sign-off.md
+├── retros/                   # Sprint Retrospective Agent outputs
+│   └── retro-[phase]-[date].md
 └── releases/                 # Deployment reports per release
     └── [version]/
         └── deployment-report.md
