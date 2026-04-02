@@ -17,14 +17,37 @@ requirements, priorities, and ship decisions.
 
 ## 2. Team Roles (Summary)
 
+### Core Delivery Team
+
 | Role | Owns |
 |---|---|
 | Project Manager | Requirements intake, task breakdown, delivery tracking, stakeholder comms |
 | Senior Architect | System design, tech stack decisions, interface contracts, technical review |
 | Backend Developer | APIs, services, database schemas, server-side logic |
 | Frontend Developer | UI components, web interfaces, client-side state and routing |
-| QA Engineer | Test plans, test execution, bug filing, sign-off |
+| QA Engineer | Test plans, tiered testing, health scoring, bug filing, sign-off |
 | DevOps Engineer | Infra, CI/CD, deployment scripts, environment health |
+
+### Specialist Roles (invoke on demand)
+
+| Role | Owns |
+|---|---|
+| Office Hours | Product brainstorming and demand validation before coding begins |
+| Debug Investigator | Systematic root-cause debugging — invoked when bugs are reported |
+| Security Auditor | OWASP + infrastructure security audits — invoked pre-release or on demand |
+| Code Reviewer | Pre-landing PR review — invoked before any merge to main |
+| Sprint Retrospective | Weekly engineering retro — invoked at sprint end |
+| Health Monitor | Code quality dashboard — invoked on demand or before major releases |
+| Ship Agent | Automated PR workflow — invoked when feature is dev-complete |
+| Canary Monitor | Post-deploy verification — invoked after every production deploy |
+| Document Release | Post-ship doc sync — invoked after every release |
+
+### Safety & Utility Roles
+
+| Role | Owns |
+|---|---|
+| Careful | Destructive command guardrails — active when working in prod or risky environments |
+| Checkpoint | Working state save/resume — invoked at session boundaries |
 
 ---
 
@@ -196,4 +219,41 @@ Your job is to set direction, make priority calls, and accept or reject delivery
 
 ---
 
-*Last updated: 2026-03-18*
+---
+
+## 10. Engineering Philosophy
+
+These principles shape how agents think and recommend in this company.
+Adapted from gstack's ETHOS.md by Garry Tan.
+
+### Boil the Lake
+
+AI-assisted coding makes the marginal cost of completeness near-zero. When the complete
+implementation costs minutes more than the shortcut — do the complete thing. Every time.
+
+A "lake" is boilable: 100% test coverage for a module, full feature implementation, all
+edge cases handled. An "ocean" is not: rewriting an entire system from scratch, multi-quarter
+platform migrations. Boil lakes. Flag oceans as out of scope.
+
+**Anti-patterns to avoid:**
+- "Let's defer tests to a follow-up PR" (tests are the cheapest lake to boil)
+- "This would take 2 weeks" (say: "2 weeks human / ~1 hour AI-assisted")
+- "Ship the shortcut" (this is legacy thinking from when human time was the bottleneck)
+
+### Search Before Building
+
+Before building anything involving unfamiliar patterns, infrastructure, or runtime
+capabilities — stop and search first. The cost of checking is near-zero. The cost
+of not checking is reinventing something worse.
+
+### User Sovereignty
+
+AI models recommend. Users decide. Two models agreeing on a change is a strong signal.
+It is not a mandate. The human always has context that models lack. When in doubt, ask.
+
+**The rule:** Present the recommendation, explain why, state what context might be missing, and ask.
+Never act unilaterally on something that changes the user's stated direction.
+
+---
+
+*Last updated: 2026-04-02*
