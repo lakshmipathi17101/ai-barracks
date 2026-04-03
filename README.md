@@ -20,6 +20,8 @@ by the agents.
 
 ## Team
 
+### Core Delivery Team
+
 | Role | Skill | Agent Prompt |
 |---|---|---|
 | Project Manager | `skills/project-manager/SKILL.md` | `agents/project-manager.md` |
@@ -28,6 +30,21 @@ by the agents.
 | Frontend Developer | `skills/frontend-dev/SKILL.md` | `agents/frontend-dev.md` |
 | QA Engineer | `skills/qa-engineer/SKILL.md` | `agents/qa-engineer.md` |
 | DevOps Engineer | `skills/devops/SKILL.md` | `agents/devops.md` |
+
+### Specialist Roles
+
+| Role | Skill | Agent Prompt |
+|---|---|---|
+| CEO | `skills/ceo/SKILL.md` | `agents/ceo.md` |
+| Ticket Writer | `skills/ticket/SKILL.md` | `agents/ticket.md` |
+| Estimator | `skills/estimate/SKILL.md` | `agents/estimate.md` |
+| Standup Facilitator | `skills/standup/SKILL.md` | `agents/standup.md` |
+| Migration Engineer | `skills/migrate/SKILL.md` | `agents/migrate.md` |
+| Refactor Engineer | `skills/refactor/SKILL.md` | `agents/refactor.md` |
+| Onboarding Guide | `skills/onboard/SKILL.md` | `agents/onboard.md` |
+| PR Reviewer | `skills/pr-review/SKILL.md` | `agents/pr-review.md` |
+| UI/UX Designer | `skills/design/SKILL.md` | `agents/design.md` |
+| Debug Engineer | `skills/debug/SKILL.md` | `agents/debug.md` |
 
 ---
 
@@ -75,19 +92,39 @@ ai-company/
 ├── README.md                        # This file
 ├── COMPANY.md                       # Company rules, workflow, and conventions
 ├── skills/
-│   ├── project-manager/SKILL.md    # Claude Code skill for the PM
-│   ├── senior-architect/SKILL.md   # Claude Code skill for the Architect
-│   ├── backend-dev/SKILL.md        # Claude Code skill for Backend Dev
-│   ├── frontend-dev/SKILL.md       # Claude Code skill for Frontend Dev
-│   ├── qa-engineer/SKILL.md        # Claude Code skill for QA
-│   └── devops/SKILL.md             # Claude Code skill for DevOps
+│   ├── project-manager/SKILL.md    # Core delivery team skills
+│   ├── senior-architect/SKILL.md
+│   ├── backend-dev/SKILL.md
+│   ├── frontend-dev/SKILL.md
+│   ├── qa-engineer/SKILL.md
+│   ├── devops/SKILL.md
+│   ├── ceo/SKILL.md                # Specialist skills
+│   ├── ticket/SKILL.md
+│   ├── estimate/SKILL.md
+│   ├── standup/SKILL.md
+│   ├── migrate/SKILL.md
+│   ├── refactor/SKILL.md
+│   ├── onboard/SKILL.md
+│   ├── pr-review/SKILL.md
+│   ├── design/SKILL.md
+│   └── debug/SKILL.md
 ├── agents/
-│   ├── project-manager.md          # Claude API system prompt
+│   ├── project-manager.md          # Claude API system prompts (core)
 │   ├── senior-architect.md
 │   ├── backend-dev.md
 │   ├── frontend-dev.md
 │   ├── qa-engineer.md
-│   └── devops.md
+│   ├── devops.md
+│   ├── ceo.md                      # Claude API system prompts (specialist)
+│   ├── ticket.md
+│   ├── estimate.md
+│   ├── standup.md
+│   ├── migrate.md
+│   ├── refactor.md
+│   ├── onboard.md
+│   ├── pr-review.md
+│   ├── design.md
+│   └── debug.md
 ├── workflows/
 │   ├── new-feature.md
 │   ├── bug-fix.md

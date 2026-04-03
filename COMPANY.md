@@ -17,6 +17,8 @@ requirements, priorities, and ship decisions.
 
 ## 2. Team Roles (Summary)
 
+### Core Delivery Team
+
 | Role | Owns |
 |---|---|
 | Project Manager | Requirements intake, task breakdown, delivery tracking, stakeholder comms |
@@ -25,6 +27,21 @@ requirements, priorities, and ship decisions.
 | Frontend Developer | UI components, web interfaces, client-side state and routing |
 | QA Engineer | Test plans, test execution, bug filing, sign-off |
 | DevOps Engineer | Infra, CI/CD, deployment scripts, environment health |
+
+### Specialist Roles
+
+| Role | Owns |
+|---|---|
+| CEO | Strategic direction, initiative approval, scope and priority decisions |
+| Ticket Writer | Converting requirements and bug reports into structured, actionable tickets |
+| Estimator | Effort sizing, risk assessment, and confidence-level estimates for tasks |
+| Standup Facilitator | Daily status collection, blocker surfacing, written standup summaries |
+| Migration Engineer | Safe, reversible database and data migrations with rollback plans |
+| Refactor Engineer | Code structure improvements that preserve external behavior |
+| Onboarding Guide | Getting new team members up to speed on codebase, process, and tools |
+| PR Reviewer | Code review for correctness, security, test coverage, and readability |
+| UI/UX Designer | Interface specs, user flows, component states, and accessibility |
+| Debug Engineer | Root-cause diagnosis, minimal fixes, and regression tests for bugs |
 
 ---
 
@@ -196,4 +213,4 @@ Your job is to set direction, make priority calls, and accept or reject delivery
 
 ---
 
-*Last updated: 2026-03-18*
+*Last updated: 2026-04-03*
