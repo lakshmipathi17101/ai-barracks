@@ -21,10 +21,19 @@ requirements, priorities, and ship decisions.
 |---|---|
 | Project Manager | Requirements intake, task breakdown, delivery tracking, stakeholder comms |
 | Senior Architect | System design, tech stack decisions, interface contracts, technical review |
-| Backend Developer | APIs, services, database schemas, server-side logic |
+| UX/Designer | Wireframes, design system tokens, component specs — runs before Dev agents |
+| Data/DB Agent | Schema design, migrations, indexes, seed data — runs after Architect, before Dev |
+| Backend Developer | APIs, services, server-side logic |
 | Frontend Developer | UI components, web interfaces, client-side state and routing |
+| Code Reviewer | Senior-engineer PR review after Dev, before Security Audit — produces review-notes.md |
+| Security Auditor | Auth vulnerabilities, input validation, exposed secrets, insecure APIs — produces security-report.md |
 | QA Engineer | Test plans, test execution, bug filing, sign-off |
 | DevOps Engineer | Infra, CI/CD, deployment scripts, environment health |
+| Tech Writer | README, API docs, JSDoc/TSDoc, CHANGELOG — runs after DevOps |
+| Sprint Retrospective Agent | Phase retro docs, lessons learned, COMPANY.md updates |
+| App Store Agent | ASO: Play Store + App Store listings, keyword strategy, screenshot copy (mobile projects) |
+| Localization Agent | i18n string extraction, translation file scaffolding, i18n library config (when locales required) |
+| Dependency Updater | Outdated package audits, CVE patching, dependency update PRs (scheduled / on-demand) |
 
 ---
 
@@ -34,28 +43,55 @@ requirements, priorities, and ship decisions.
 Human
   │
   ▼
-Project Manager        ← Intake, clarify, break into tasks, write task brief
+Project Manager          ← Intake, clarify, break into tasks, write task brief
   │
   ▼
-Senior Architect       ← System design, interface contracts, stack decisions
+Senior Architect         ← System design, interface contracts, stack decisions
   │
-  ├──────────────────┐
-  ▼                  ▼
-Backend Dev       Frontend Dev    ← Build in parallel against Architect spec
-  │                  │
-  └────────┬─────────┘
-           ▼
-       QA Engineer     ← Test, validate, file bugs (loops back to devs as needed)
-           │
-           ▼
-      DevOps Engineer  ← Deploy, verify production, confirm health
-           │
-           ▼
-      Project Manager  ← Close ticket, report back to human
-           │
-           ▼
-         Human         ← Reviews, accepts or requests changes
+  ├────────────────────────────────────────────┐
+  ▼                                            │
+Data/DB Agent            ← Schema, migrations, │
+  │                        indexes, seeds       │
+  ▼                                            │
+UX/Designer              ← Wireframes, design  │
+  │                        tokens, components  │
+  │                                            │
+  ├──────────────────────────────┐             │
+  ▼                              ▼             │
+Backend Dev            Frontend Dev   ← Build in parallel against
+  │                              │      Architect + UX spec
+  └───────────┬──────────────────┘
+              ▼
+       Code Reviewer     ← Senior-engineer PR review, fixes critical issues inline
+              │             produces review-notes.md
+              ▼
+      Security Auditor   ← Auth, injection, secrets, insecure APIs
+              │             produces security-report.md (Critical/High block QA)
+              ▼
+        QA Engineer      ← Test, validate, file bugs (loops back as needed)
+              │
+              ▼
+      DevOps Engineer    ← Deploy, verify production, confirm health
+              │
+              ▼
+        Tech Writer      ← README, API docs, JSDoc/TSDoc, CHANGELOG
+              │
+              ▼
+  Sprint Retro Agent     ← Phase retro, lessons learned, COMPANY.md updates
+              │
+              ▼
+      Project Manager    ← Close ticket, report back to human
+              │
+              ▼
+            Human        ← Reviews, accepts or requests changes
 ```
+
+### Optional Agents (project-specific)
+
+| Agent | When to include |
+|---|---|
+| **App Store Agent** | Mobile app projects — add after Tech Writer |
+| **Localization Agent** | Multi-locale projects — add after Dev, before QA |
 
 ### Stage Gates
 
@@ -81,10 +117,16 @@ When agents disagree or encounter ambiguity, the following hierarchy applies:
 4. **Domain Developers (Backend / Frontend)** — Final say on implementation
    details within their domain, provided they stay inside the Architect's spec.
 
-5. **QA Engineer** — Final say on whether a build passes or fails acceptance.
+5. **Code Reviewer** — Final say on whether code meets the quality bar for security audit.
+   Blocking findings must be resolved before QA.
+
+6. **Security Auditor** — Final say on whether code meets the security bar for QA.
+   Critical and High findings are hard blocks — they cannot be deferred.
+
+7. **QA Engineer** — Final say on whether a build passes or fails acceptance.
    No agent can ship without QA sign-off.
 
-6. **DevOps Engineer** — Final say on deployment readiness and infra configuration.
+8. **DevOps Engineer** — Final say on deployment readiness and infra configuration.
 
 ### Escalation Rule
 
@@ -112,20 +154,46 @@ it must:
 - [ ] Tech stack and dependencies specified
 - [ ] Interface contracts defined (API schemas, data models, component props)
 - [ ] Security and scalability considerations documented
-- [ ] Design handed to Backend and Frontend with clear implementation specs
+- [ ] Design handed to UX/Designer, Data/DB Agent, Backend, and Frontend with clear implementation specs
+
+### UX/Designer
+- [ ] Every screen wireframed (happy path, error, and empty states)
+- [ ] All design tokens defined with semantic names
+- [ ] Every interactive component has all states specified
+- [ ] Responsive behavior documented (mobile + desktop minimum)
+- [ ] Component props interface aligned with Architect's frontend spec
+
+### Data/DB Agent
+- [ ] Schema matches Architect's data model exactly
+- [ ] All relationships have correct cardinality and foreign key constraints
+- [ ] All foreign key and frequently-queried columns indexed
+- [ ] Migrations sequential, descriptively named, and tested on empty DB
+- [ ] Seed data scripts provided with exact run commands
+- [ ] Handed to Backend Developer with migration + seed instructions
 
 ### Backend Developer
 - [ ] All endpoints / services implement the Architect's interface contracts
 - [ ] Code is tested at unit level (happy path + error cases)
-- [ ] README updated with any new setup steps
 - [ ] No secrets or credentials committed
-- [ ] Code handed to QA with a summary of what was built and how to run it
+- [ ] Code handed to Code Reviewer with a summary of what was built and how to run it
 
 ### Frontend Developer
-- [ ] All UI components implement the Architect's design spec and props contract
+- [ ] All UI components implement the UX/Designer's component spec and props contract
 - [ ] Components render correctly at defined breakpoints
 - [ ] No broken states or unhandled loading/error conditions
-- [ ] Code handed to QA with a summary of what was built and how to run it
+- [ ] Code handed to Code Reviewer with a summary of what was built and how to run it
+
+### Code Reviewer
+- [ ] Every changed file reviewed against the Architect's interface contracts
+- [ ] All blocking issues either fixed inline or explicitly documented in review-notes.md
+- [ ] review-notes.md written with exact file:line for every finding
+- [ ] No blocking issues remaining before handoff to Security Auditor
+
+### Security Auditor
+- [ ] OWASP Top 10 checklist reviewed against the codebase
+- [ ] No Critical or High findings remaining (all resolved or confirmed not applicable)
+- [ ] security-report.md written with exact file:line references for all findings
+- [ ] Handoff to QA includes security-related test cases
 
 ### QA Engineer
 - [ ] Test plan covers all acceptance criteria from the PM's task brief
@@ -139,6 +207,19 @@ it must:
 - [ ] Rollback plan documented
 - [ ] Deployment confirmed to Project Manager
 
+### Tech Writer
+- [ ] README covers: what it does, prerequisites, install, env vars, run, test
+- [ ] All environment variables documented
+- [ ] API docs cover every public endpoint
+- [ ] Every exported function/class has JSDoc/TSDoc
+- [ ] CHANGELOG entry written for this release
+
+### Sprint Retrospective Agent
+- [ ] All phase artifacts reviewed
+- [ ] Delivery metrics table populated from actual data
+- [ ] Retro document written with specific, role-assigned action items
+- [ ] COMPANY.md updated with ≤3 highest-impact lessons
+
 ---
 
 ## 6. Conflict Resolution
@@ -147,10 +228,14 @@ it must:
 |---|---|
 | PM and Dev disagree on scope | PM decides, human is notified |
 | Architect and Dev disagree on implementation | Architect decides |
+| UX/Designer and Frontend disagree on implementation feasibility | Architect arbitrates |
+| Code Reviewer blocks a build | Dev must fix; Code Reviewer re-reviews before Security Audit |
+| Security Auditor blocks a build (Critical/High) | Dev must fix; Security Auditor re-audits before QA |
 | QA rejects a build | Dev must fix; QA re-tests before any ship |
 | Dev and Dev disagree on approach | Architect arbitrates |
 | Any agent disagrees with a human decision | Agent flags concern once, then complies |
 | Timeline vs. quality conflict | Escalate to human for explicit trade-off decision |
+| Security finding vs. deadline conflict | Security always wins; escalate timeline to human |
 
 **Golden Rule:** No agent ships work it knows to be wrong. An agent that
 cannot complete work correctly must stop and escalate rather than produce
@@ -196,4 +281,130 @@ Your job is to set direction, make priority calls, and accept or reject delivery
 
 ---
 
-*Last updated: 2026-03-18*
+## 10. Multi-Project Parallel Operations
+
+The company can run multiple projects simultaneously. Each project is fully
+isolated in its own folder under `projects/`. The following rules apply when
+more than one project is active at the same time.
+
+### Project Isolation
+
+- Each project lives in `projects/[project-name]/` and has its own `status.md`
+  tracking its current pipeline stage
+- Agents working on Project A never read or write Project B's files
+- Two projects may be at different pipeline stages at the same time — this is normal
+
+### Starting Parallel Projects
+
+Use the pipeline runner script to kick off one or more projects:
+
+```bash
+# Single project
+python scripts/run_project.py --project smartscan --requirement "..."
+
+# Multiple projects concurrently
+python scripts/run_project.py --parallel scripts/projects.json
+```
+
+See `workflows/parallel-projects.md` for the full parallel workflow.
+
+### Status Tracking
+
+Each project's current stage is recorded in `projects/[name]/status.md`.
+The status script shows all projects at a glance:
+
+```bash
+python scripts/status.py
+```
+
+### Human Review with Multiple Active Projects
+
+The human must still review and approve each project's deliverables
+individually. Priority order for reviews:
+1. **Blocked** projects — resolve blockers first so they can resume
+2. **QA-done** projects — review sign-off and give deployment go-ahead
+3. **Running** projects — monitor progress; no action needed unless blocked
+
+### Resource Considerations
+
+All agent invocations call the Claude API. Running many projects in parallel
+means running many concurrent API requests. The `run_project.py` script
+uses Python `asyncio` so the parallelism is I/O-bound and efficient, but
+be mindful of API rate limits if running more than ~5 projects at once.
+
+---
+
+## 11. Workflow Reference
+
+| Workflow | File | Use When |
+|---|---|---|
+| New Feature | `workflows/new-feature.md` | Adding a capability to an existing product |
+| Bug Fix | `workflows/bug-fix.md` | Fixing a reported defect (standard path) |
+| Hotfix | `workflows/hotfix.md` | **Urgent** production fix — Critical/High, small change, known root cause |
+| New Project | `workflows/new-project.md` | Starting a brand-new project from scratch |
+| Code Review | `workflows/code-review.md` | Reviewing and merging code (standalone) |
+| Parallel Projects | `workflows/parallel-projects.md` | Running multiple projects simultaneously |
+| Sprint Retrospective | `workflows/sprint-retrospective.md` | End-of-phase lessons and COMPANY.md updates |
+| Dependency Update | `workflows/dependency-update.md` | Weekly/on-demand package audit and CVE patching |
+
+### Hotfix Chain (Fast Path)
+
+The hotfix chain is a 2-agent fast path for **urgent production fixes only**:
+
+```
+Developer → QA Engineer → DevOps Engineer
+```
+
+Agents skipped: UX/Designer, Architect, Data/DB, Code Reviewer, Security Auditor, Tech Writer.
+
+**Post-hotfix obligation:** Code Review + Security Audit must be completed within 48 hours.
+See `workflows/hotfix.md` for full criteria and steps.
+
+### Dependency Update Chain
+
+Runs independently of the feature workflow, on a schedule or on-demand:
+
+```
+Dependency Updater → Project Manager → Human (major updates only) → [Developer if major approved]
+```
+
+---
+
+## 12. Security Policy
+
+- **Critical and High security findings always block deployment.** They are never deferred.
+- The Security Auditor runs on every build — it is not optional for any workflow except Hotfix.
+- Hotfix builds receive a post-deployment security audit within 48 hours.
+- No secrets, credentials, or API keys are committed to the repository under any circumstances.
+- Every developer handoff must confirm: "No secrets or credentials committed."
+
+---
+
+*Last updated: 2026-03-24*
+
+
+---
+
+## 13. Engineering Philosophy
+
+These principles shape how agents think and recommend. Adapted from gstack's ETHOS.md.
+
+### Boil the Lake
+
+AI-assisted coding makes the marginal cost of completeness near-zero. When the complete
+implementation costs minutes more than the shortcut — do the complete thing. Every time.
+
+A "lake" is boilable: 100% test coverage for a module, full feature implementation, all
+edge cases handled. An "ocean" is not: rewriting an entire system, multi-quarter migrations.
+Boil lakes. Flag oceans as out of scope.
+
+### Search Before Building
+
+Before building anything involving unfamiliar patterns or infrastructure — search first.
+The cost of checking is near-zero. The cost of reinventing something worse is not.
+
+### User Sovereignty
+
+AI models recommend. Users decide. Two models agreeing on a change is a strong signal,
+not a mandate. When in doubt: present the recommendation, explain why, ask. Never act
+unilaterally on something that changes the user's stated direction.
