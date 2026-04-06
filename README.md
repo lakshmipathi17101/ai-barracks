@@ -20,14 +20,69 @@ by the agents.
 
 ## Team
 
+### Core Delivery Team
+
 | Role | Skill | Agent Prompt |
 |---|---|---|
 | Project Manager | `skills/project-manager/SKILL.md` | `agents/project-manager.md` |
 | Senior Architect | `skills/senior-architect/SKILL.md` | `agents/senior-architect.md` |
+| UX/Designer | `skills/ux-designer/SKILL.md` | `agents/ux-designer.md` |
+| Data/DB Agent | `skills/data-db/SKILL.md` | `agents/data-db.md` |
 | Backend Developer | `skills/backend-dev/SKILL.md` | `agents/backend-dev.md` |
 | Frontend Developer | `skills/frontend-dev/SKILL.md` | `agents/frontend-dev.md` |
+| Code Reviewer | `skills/code-reviewer/SKILL.md` | `agents/code-reviewer.md` |
+| Security Auditor | `skills/security-auditor/SKILL.md` | `agents/security-auditor.md` |
 | QA Engineer | `skills/qa-engineer/SKILL.md` | `agents/qa-engineer.md` |
 | DevOps Engineer | `skills/devops/SKILL.md` | `agents/devops.md` |
+| Tech Writer | `skills/tech-writer/SKILL.md` | `agents/tech-writer.md` |
+| Sprint Retrospective Agent | `skills/sprint-retrospective/SKILL.md` | `agents/sprint-retrospective.md` |
+| App Store Agent *(mobile)* | `skills/app-store/SKILL.md` | `agents/app-store.md` |
+| Localization Agent *(multi-locale)* | `skills/localization/SKILL.md` | `agents/localization.md` |
+| Dependency Updater | `skills/dependency-updater/SKILL.md` | `agents/dependency-updater.md` |
+
+---
+
+## Extended Team — Specialist Skills (from gstack)
+
+Adapted from [garrytan/gstack](https://github.com/garrytan/gstack). Invoke on demand.
+
+| Skill | What it does |
+|---|---|
+| `skills/office-hours/` | YC-style product brainstorming before any code is written. Startup mode (demand validation) or Builder mode (creative exploration). |
+| `skills/investigate/` | Systematic root-cause debugging. Iron Law: no fixes without root cause. 4-phase: investigate → analyze → hypothesize → implement. |
+| `skills/ship/` | Automated PR workflow: merge base branch, run tests, pre-landing review, push, open PR. |
+| `skills/health/` | Code quality dashboard. Weighted 0–10 composite score across type safety, tests, lint, and dead code. Tracks trends over time. |
+| `skills/canary/` | Post-deploy critical path monitoring with baseline comparison and rollback recommendations. |
+| `skills/document-release/` | Post-ship doc sync. Updates README/CHANGELOG/ARCHITECTURE to match what actually shipped. |
+| `skills/careful/` | Destructive command guardrails. Requires explicit confirmation before `rm -rf`, DROP TABLE, force-push, etc. |
+| `skills/checkpoint/` | Working state save/resume. Captures decisions, open threads, and exact resume point across sessions. |
+
+---
+
+## Recommended Session Workflows
+
+**Starting a new product idea:** `/office-hours` → PM → Architect → Dev → QA → Ship
+
+**Debugging a production issue:** `/investigate` → fix → QA (regression) → `/ship` → `/canary`
+
+**Pre-ship quality gate:** `/health` → Code Reviewer → Security Auditor → `/ship`
+
+**After a release:** `/document-release` → `/canary`
+
+### Specialist Roles
+
+| Role | Skill | Agent Prompt |
+|---|---|---|
+| CEO | `skills/ceo/SKILL.md` | `agents/ceo.md` |
+| Ticket Writer | `skills/ticket/SKILL.md` | `agents/ticket.md` |
+| Estimator | `skills/estimate/SKILL.md` | `agents/estimate.md` |
+| Standup Facilitator | `skills/standup/SKILL.md` | `agents/standup.md` |
+| Migration Engineer | `skills/migrate/SKILL.md` | `agents/migrate.md` |
+| Refactor Engineer | `skills/refactor/SKILL.md` | `agents/refactor.md` |
+| Onboarding Guide | `skills/onboard/SKILL.md` | `agents/onboard.md` |
+| PR Reviewer | `skills/pr-review/SKILL.md` | `agents/pr-review.md` |
+| UI/UX Designer | `skills/design/SKILL.md` | `agents/design.md` |
+| Debug Engineer | `skills/debug/SKILL.md` | `agents/debug.md` |
 
 ---
 
@@ -37,18 +92,47 @@ by the agents.
 You (Human)
     │  Give requirement
     ▼
-Project Manager  →  Senior Architect  →  Backend Dev ─┐
-                                      →  Frontend Dev ─┤
-                                                        ▼
-                                                  QA Engineer
-                                                        │
-                                                        ▼
-                                               DevOps Engineer
-                                                        │
-                                                        ▼
-                                                  You (Human)
-                                                  Accept / Request changes
+Project Manager
+    │
+    ▼
+Senior Architect
+    │
+    ├─────────────────────────────────────┐
+    ▼                                     │
+Data/DB Agent  ←  schema, migrations     │
+    │                                     │
+    ▼                                     │
+UX/Designer  ←  wireframes, tokens       │
+    │                                     │
+    ├─────────────────────┐               │
+    ▼                     ▼               │
+Backend Dev          Frontend Dev  ←──────┘
+    │                     │
+    └──────────┬───────────┘
+               ▼
+         Code Reviewer  ←  review-notes.md
+               │
+               ▼
+       Security Auditor  ←  security-report.md
+               │
+               ▼
+          QA Engineer
+               │
+               ▼
+        DevOps Engineer
+               │
+               ▼
+          Tech Writer  ←  README, API docs, CHANGELOG
+               │
+               ▼
+    Sprint Retro Agent  ←  retro doc, COMPANY.md updates
+               │
+               ▼
+        You (Human)
+        Accept / Request changes
 ```
+
+**Optional agents:** App Store Agent (mobile projects), Localization Agent (multi-locale projects)
 
 See `COMPANY.md` for the full operating manual: escalation rules, definitions of
 done, conflict resolution, and how to plug into the workflow.
@@ -59,13 +143,16 @@ done, conflict resolution, and how to plug into the workflow.
 
 Pre-defined end-to-end procedures for common scenarios:
 
-| Workflow | Description |
-|---|---|
-| `workflows/new-feature.md` | Building a new feature from requirement to deployment |
-| `workflows/bug-fix.md` | Handling a reported bug |
-| `workflows/new-project.md` | Starting a brand-new project from scratch |
-| `workflows/code-review.md` | Reviewing and merging code |
-| `workflows/parallel-projects.md` | Running multiple projects simultaneously |
+| Workflow | File | Description |
+|---|---|---|
+| New Feature | `workflows/new-feature.md` | Building a new feature from requirement to deployment |
+| Bug Fix | `workflows/bug-fix.md` | Handling a reported bug (standard path) |
+| **Hotfix** | `workflows/hotfix.md` | **Fast 2-agent path for urgent production fixes** |
+| New Project | `workflows/new-project.md` | Starting a brand-new project from scratch |
+| Code Review | `workflows/code-review.md` | Reviewing and merging code (standalone) |
+| Parallel Projects | `workflows/parallel-projects.md` | Running multiple projects simultaneously |
+| **Sprint Retrospective** | `workflows/sprint-retrospective.md` | **Phase retro and COMPANY.md lessons** |
+| **Dependency Update** | `workflows/dependency-update.md` | **Weekly/on-demand package audits and CVE patching** |
 
 ---
 
@@ -73,39 +160,77 @@ Pre-defined end-to-end procedures for common scenarios:
 
 ```
 ai-company/
-├── README.md                        # This file
-├── CLAUDE.md                        # Framework reference (start here)
-├── COMPANY.md                       # Company rules, workflow, and conventions
+├── README.md                              # This file
+├── CLAUDE.md                              # Framework reference (start here)
+├── COMPANY.md                             # Company rules, workflow, and conventions
 ├── skills/
-│   ├── project-manager/SKILL.md    # Claude Code skill for the PM
-│   ├── senior-architect/SKILL.md   # Claude Code skill for the Architect
-│   ├── backend-dev/SKILL.md        # Claude Code skill for Backend Dev
-│   ├── frontend-dev/SKILL.md       # Claude Code skill for Frontend Dev
-│   ├── qa-engineer/SKILL.md        # Claude Code skill for QA
-│   └── devops/SKILL.md             # Claude Code skill for DevOps
+│   ├── project-manager/SKILL.md          # Core delivery team skills
+│   ├── senior-architect/SKILL.md
+│   ├── ux-designer/SKILL.md
+│   ├── data-db/SKILL.md
+│   ├── backend-dev/SKILL.md
+│   ├── frontend-dev/SKILL.md
+│   ├── code-reviewer/SKILL.md
+│   ├── security-auditor/SKILL.md
+│   ├── qa-engineer/SKILL.md
+│   ├── devops/SKILL.md
+│   ├── tech-writer/SKILL.md
+│   ├── sprint-retrospective/SKILL.md
+│   ├── app-store/SKILL.md
+│   ├── localization/SKILL.md
+│   ├── dependency-updater/SKILL.md
+│   ├── ceo/SKILL.md                      # Specialist skills
+│   ├── ticket/SKILL.md
+│   ├── estimate/SKILL.md
+│   ├── standup/SKILL.md
+│   ├── migrate/SKILL.md
+│   ├── refactor/SKILL.md
+│   ├── onboard/SKILL.md
+│   ├── pr-review/SKILL.md
+│   ├── design/SKILL.md
+│   └── debug/SKILL.md
 ├── agents/
-│   ├── project-manager.md          # Claude API system prompt
+│   ├── project-manager.md                # Claude API system prompts (core)
 │   ├── senior-architect.md
+│   ├── ux-designer.md
+│   ├── data-db.md
 │   ├── backend-dev.md
 │   ├── frontend-dev.md
+│   ├── code-reviewer.md
+│   ├── security-auditor.md
 │   ├── qa-engineer.md
-│   └── devops.md
+│   ├── devops.md
+│   ├── tech-writer.md
+│   ├── sprint-retrospective.md
+│   ├── app-store.md
+│   ├── localization.md
+│   ├── dependency-updater.md
+│   ├── ceo.md                            # Claude API system prompts (specialist)
+│   ├── ticket.md
+│   ├── estimate.md
+│   ├── standup.md
+│   ├── migrate.md
+│   ├── refactor.md
+│   ├── onboard.md
+│   ├── pr-review.md
+│   ├── design.md
+│   └── debug.md
 ├── workflows/
 │   ├── new-feature.md
 │   ├── bug-fix.md
+│   ├── hotfix.md                         # NEW: fast 2-agent path for urgent fixes
 │   ├── new-project.md
 │   ├── code-review.md
-│   └── parallel-projects.md        # Running multiple projects simultaneously
+│   ├── parallel-projects.md              # Running multiple projects simultaneously
+│   ├── sprint-retrospective.md           # NEW: phase retro workflow
+│   └── dependency-update.md              # NEW: dependency audit workflow
 ├── scripts/
-│   ├── run_project.py              # Start / resume a project pipeline (supports parallel)
-│   └── status.py                   # Cross-project status dashboard
-└── projects/                        # Client/product work lives here
+│   ├── run_project.py                    # Start / resume a project pipeline (supports parallel)
+│   └── status.py                         # Cross-project status dashboard
+└── projects/                             # Client/product work lives here
     └── [project-name]/
-        ├── status.md               # Pipeline state for this project
-        ├── task-brief.md
-        ├── design.md
-        ├── implementation.md
-        └── qa/
+        ├── status.md                     # Pipeline state for this project
+        └── ...
 ```
 
 ---
