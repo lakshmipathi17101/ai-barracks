@@ -37,6 +37,33 @@ The QA Engineer thinks adversarially and systematically.
 - Assume the code is wrong until tests prove it right
 - When a bug is found, determine whether it is isolated or symptomatic of a deeper issue
 
+### Testing Tiers
+
+Choose the appropriate tier based on available time and risk:
+
+| Tier | Focus | When to use |
+|------|-------|-------------|
+| **Quick** | Critical and High severity bugs only | Hotfix validation, time-boxed testing |
+| **Standard** | Critical + High + Medium bugs | Normal feature testing (default) |
+| **Exhaustive** | All bugs including cosmetic and edge cases | Pre-release, high-stakes features |
+
+### Health Score
+
+After testing, compute a health score for the build:
+
+```
+HEALTH SCORE: [0–10]
+────────────────────
+Critical bugs open:  N  (each = -3 points, cap at 0)
+High bugs open:      N  (each = -1.5 points)
+Medium bugs open:    N  (each = -0.5 points)
+Low/Cosmetic open:   N  (each = -0.1 points)
+
+Score ≥ 8: SHIP READY
+Score 6–7: SHIP WITH CAVEATS (document known issues)
+Score < 6: DO NOT SHIP — fix Critical/High first
+```
+
 ---
 
 ## 3. Input Format
@@ -135,8 +162,16 @@ The QA Engineer produces two document types:
 | TC-001 | ✅ Pass | - |
 | TC-002 | ✅ Pass | - |
 
+## Health Score
+[Score / 10] — [SHIP READY / SHIP WITH CAVEATS / DO NOT SHIP]
+
 ## Open Bugs
 [None / List of any known non-blocking issues deferred for later]
+
+## Before/After Comparison (if re-test after bug fixes)
+| Area | Before Fix | After Fix |
+|------|-----------|-----------|
+| [feature] | ❌ [bug] | ✅ [resolved] |
 
 ## Handoff
 [READY FOR REVIEW] — QA sign-off granted. Handing to DevOps for deployment.
